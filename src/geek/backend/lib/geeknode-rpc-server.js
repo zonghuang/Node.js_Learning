@@ -1,17 +1,18 @@
-const RPC = require('./rpc-server');
+const RPC = require('../../../gg/backend/lib/rpc-server');
 
 /**
  * 因为所有服务用的包头格式都一样，不一样的只有protobuf协议，所以这里可以将这段逻辑封成一个模块
  */
-module.exports = function (protobufRequestSchema, protobufResponseSchema) {
+module.exports = function(protobufRequestSchema, protobufResponseSchema) {
   return new RPC({
+    
     // 解码请求包
     decodeRequest(buffer) {
       const seq = buffer.readUInt32BE();
 
       return {
         seq: seq,
-        result: protobufRequestSchema.decode(buffer.slice(8)),
+        result: protobufRequestSchema.decode(buffer.slice(8))
       };
     },
 
@@ -32,5 +33,6 @@ module.exports = function (protobufRequestSchema, protobufResponseSchema) {
 
       return Buffer.concat([head, body]);
     }
+
   })
 }
